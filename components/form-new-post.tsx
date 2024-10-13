@@ -1,5 +1,5 @@
 'use client';
-import React, { ChangeEvent, useState } from "react"; // Import both ChangeEvent and useState
+import React, { ChangeEvent, FormEvent, useState } from "react"; // Import both ChangeEvent and useState
 import TextareaAutosize from "react-textarea-autosize"; // Import here
 
 // Define the FormData interface
@@ -28,11 +28,21 @@ const FormNewPost = () => {
         console.log('Form submitted:', formData);
 
         const {name, value} = e.target;
+        setFormData({
+            ...formData,
+            [name]:value,
+        })
         
     };
 
+    const handleSubmit = (e: FormEvent<HTMLFormElement>) =>{
+        e.preventDefault();
+        console.log(formData);
+    }
+
     return (
-        <form className="max-w-4xl mx-auto p-4" onSubmit={handleSubmit}>
+        <form className="max-w-4xl mx-auto p-4" 
+        onSubmit={handleSubmit}>
             <div className="mb-4">
                 <input 
                     type="text" 
