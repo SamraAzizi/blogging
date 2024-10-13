@@ -12,9 +12,7 @@ const BlogsPage = () =>{
         </div>
 
         {posts.map((post) =>(
-            <a key ={post.id} href={`/blogs/${post.id}`} className='bg-white p-4 rounded-md shadow'>
-                <h2 className='text-xl font-bold'>{post.title}</h2>
-                <p>Written by: {post.username}</p>
+            <a key ={post.id} hre
             </a>
         ))}
         
