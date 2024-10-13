@@ -17,28 +17,18 @@ const FormNewPost = () => {
         content: ''
     });
 
+    // Handle input changes for both text input and textarea
     const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target; // Destructure name and value from the target
         setFormData(prev => ({ ...prev, [name]: value })); // Update state
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    // Single handleSubmit function
+    const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault(); // Prevent default form submission
         // Handle form submission logic here, e.g., sending data to a server
         console.log('Form submitted:', formData);
-
-        const {name, value} = e.target;
-        setFormData({
-            ...formData,
-            [name]:value,
-        })
-        
     };
-
-    const handleSubmit = (e: FormEvent<HTMLFormElement>) =>{
-        e.preventDefault();
-        console.log(formData);
-    }
 
     return (
         <form className="max-w-4xl mx-auto p-4" 
