@@ -18,7 +18,7 @@ const BlogsPage = () =>{
             </a>
         ))}
         
-
+        <Comments />
     </div>
     );
 };
