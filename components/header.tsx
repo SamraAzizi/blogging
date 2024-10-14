@@ -17,4 +17,18 @@ const Header = () => {
 
             </li>
             <li>
-                <a href ='
+                <a href ='/api/auth/signing'
+                className="text-white hover:underline">
+                    login
+
+                </a>
+
+            </li>
+          </ul>
+        </nav>
+      </header>
+    );
+  };
+  
+  export default Header;
+  
