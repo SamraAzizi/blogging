@@ -16,6 +16,8 @@ const FormNewPost = () => {
         title: '',
         content: ''
     });
+    const { data } useSession();
+    console.log(data?.user)
 
     // Handle input changes for both text input and textarea
     const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
