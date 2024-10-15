@@ -17,7 +17,7 @@ const FormNewPost = () => {
         content: ''
     });
     const { data } useSession();
-    console.log(data?.user)
+    const router  = useRouter();
 
     // Handle input changes for both text input and textarea
     const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -26,10 +26,18 @@ const FormNewPost = () => {
     };
 
     // Single handleSubmit function
-    const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async(e: FormEvent<HTMLFormElement>) => {
         e.preventDefault(); // Prevent default form submission
         // Handle form submission logic here, e.g., sending data to a server
-        console.log('Form submitted:', formData);
+        try{
+            const response = await axios.post('api/posts', formData);
+            if(response.status === 200)
+                router.push(`/blogs/${response.data.newPost.id}`)
+
+        } catch(error){
+            console.error(error);
+
+        }
     };
 
     return (
