@@ -15,7 +15,7 @@ const FormNewPost = () => {
     title: '',
     content: '',
   });
-  const { data } = useSession();
+  const { data: session } = useSession(); // Destructure data to get session
   const router = useRouter();
 
   const handleChange = (
@@ -66,7 +66,7 @@ const FormNewPost = () => {
         />
       </div>
       <button
-        disabled={!data?.user?.email}
+        disabled={!session?.user?.email} // Use session instead of data
         type='submit'
         className='bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:ring focus:border-blue-300 w-full disabled:bg-gray-400'
       >

@@ -1,14 +1,10 @@
-// app/page.js
-const Header = () => {
-  return (
-    <header className="bg-blue-500 p-4">
-      <nav className='flex justify-between items-center max-w-4xl mx-auto'>
-        <a href="/" className='text-white text-2xl font-bold'>
-          My Blogs
-        </a>
-      </nav>
-    </header>
-  );
-};
+// pages/_app.js or _app.tsx
+import { SessionProvider } from 'next-auth/react';
 
-export default Header;
+export default function MyApp({ Component, pageProps }) {
+  return (
+    <SessionProvider session={pageProps.session}>
+      <Component {...pageProps} />
+    </SessionProvider>
+  );
+}

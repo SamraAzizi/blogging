@@ -37,35 +37,22 @@ model Session {
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
-model User {
-  id            String    @id @default(cuid())
-  name          String?
-  email         String?   @unique
-  emailVerified DateTime?
-  image         String?
-  accounts      Account[]
-  sessions      Session[]
-  posts         Post[]
-  comments      Comment[]
-}
-
-model VerificationToken {
-  identifier String
-  token      String   @unique
-  expires    DateTime
-
-  @@unique([identifier, token])
-}
-
 model Post {
-  id          String    @id @default(cuid())
-  title       String
-  content     String
-  author      User?     @relation(fields: [authorEmail], references: [email])
-  authorEmail String?
-  createdAt   DateTime  @default(now())
-  comments    Comment[]
+  id        Int      @id @default(autoincrement())
+  title     String
+  content   String
+  createdAt DateTime @default(now())
+  authorId  Int
+  author    User     @relation(fields: [authorId], references: [id])
 }
+
+model User {
+  id    Int    @id @default(autoincrement())
+  name  String
+  email String @unique
+  posts Post[]
+}
+
 
 model Comment {
   id        String   @id @default(cuid())
@@ -76,4 +63,12 @@ model Comment {
   authorEmail String?
   Post        Post?   @relation(fields: [postId], references: [id])
   postId      String?
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
 }
