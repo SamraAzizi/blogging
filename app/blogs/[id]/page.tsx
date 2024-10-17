@@ -8,15 +8,7 @@ interface BlogDetailPageProps {
     id: string;
   };
 }
-const BlogDetailPage: FC<BlogDetailPageProps> = async ({ params }) => {
-  const post = await prisma.post.findFirst({
-    where: {
-      id: params.id,
-    },
-    include: {
-      author: true,
-    },
-  });
+
 
   return (
     <div className='max-w-4xl mx-auto py-8'>
