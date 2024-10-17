@@ -1,5 +1,4 @@
-export interface FormData{
-    title:string,
-    content:string
-
-}
+export interface FormData {
+    title: string,
+    content: string
+  }

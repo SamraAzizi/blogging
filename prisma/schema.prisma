@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -11,54 +8,36 @@ datasource db {
 }
 
 model Account {
-  id                String  @id @default(cuid())
+  id                String   @id
   userId            String
   type              String
   provider          String
   providerAccountId String
-  refresh_token     String? @db.Text
-  access_token      String? @db.Text
+  refresh_token     String?
+  access_token      String?
   expires_at        Int?
   token_type        String?
   scope             String?
-  id_token          String? @db.Text
+  id_token          String?
   session_state     String?
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
 }
 
 model Session {
-  id           String   @id @default(cuid())
+  id           String   @id
   sessionToken String   @unique
   userId       String
   expires      DateTime
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
-model Post {
-  id        Int      @id @default(autoincrement())
-  title     String
-  content   String
-  createdAt DateTime @default(now())
-  authorId  Int
-  author    User     @relation(fields: [authorId], references: [id])
-}
 
-
-
-
-model Comment {
-  id        String   @id @default(cuid())
-  text      String
-  createdAt DateTime @default(now())
-
-  author      User?   @relation(fields: [authorEmail], references: [email])
-  authorEmail String?
-  Post        Post?   @relation(fields: [postId], references: [id])
-  postId      String?
-}
 
 model VerificationToken {
   identifier String
@@ -66,4 +45,48 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+model User {
+  id            Int        @id @default(autoincrement())
+  name          String?
+  email         String     @unique
+  posts         Post[]     @relation("UserPosts") // Define relation name
+  emailVerified  DateTime?
+  image         String?
+  accounts      Account[]
+  sessions      Session[]
+  comments      Comment[]
+}
+
+model Post {
+  id        Int       @id @default(autoincrement())
+  title     String
+  content   String
+  authorEmail String? // Add this if you are referencing user by email
+  author    User?     @relation("UserPosts", fields: [authorEmail], references: [email]) // Add the relation back to User
+  comments  Comment[]
+}
+
+model Comment {
+  id        Int     @id @default(autoincrement())
+  postId    Int
+  post      Post    @relation(fields: [postId], references: [id]) // Relation back to Post
+  authorId  Int
+  author    User    @relation(fields: [authorId], references: [id]) // Assuming you're linking comments to users
+}
+
+
+model Authenticator {
+  credentialID         String  @unique
+  userId               String
+  providerAccountId    String
+  credentialPublicKey  String
+  counter              Int
+  credentialDeviceType String
+  credentialBackedUp   Boolean
+  transports           String?
+  User                 User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([userId, credentialID])
 }

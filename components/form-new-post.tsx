@@ -15,13 +15,12 @@ const FormNewPost = () => {
     title: '',
     content: '',
   });
-  const { data: session } = useSession(); // Destructure data to get session
+  const { data } = useSession();
   const router = useRouter();
 
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    e.preventDefault();
     const { name, value } = e.target;
     setFormData({
       ...formData,
@@ -29,18 +28,22 @@ const FormNewPost = () => {
     });
   };
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    console.log("Form submitted!");
+
+    // Log the current state of formData
+    console.log("Form data:", formData);
 
     try {
-      const response = await axios.post('api/posts', formData);
-
-      if (response.status === 200) {
-        router.push(`/blogs/${response.data.newPost.id}`);
-      }
-    } catch (error) {
-      console.error(error);
-    }
+      const response = await axios.post('http://localhost:3000/api/posts', formData);
+      console.log("Post created:", response.data);
+      router.push('/'); // Redirect after successful post (optional)
+  } catch (error) {
+      console.error("Error creating post:", error.response ? error.response.data : error.message);
+      alert("An error occurred while creating the post. Please try again.");
+  }
+  
   };
 
   return (
@@ -53,6 +56,7 @@ const FormNewPost = () => {
           name='title'
           value={formData.title}
           onChange={handleChange}
+          required // Make title required
         />
       </div>
       <div className='mb-4'>
@@ -63,11 +67,12 @@ const FormNewPost = () => {
           placeholder='Enter the content'
           value={formData.content}
           onChange={handleChange}
+          required // Make content required
         />
       </div>
       <button
-        disabled={!session?.user?.email} // Use session instead of data
-        type='submit'
+        disabled={!data?.user?.email} // Disable button if not authenticated
+        type='submit' // Specifies that this button submits the form
         className='bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:ring focus:border-blue-300 w-full disabled:bg-gray-400'
       >
         Submit
